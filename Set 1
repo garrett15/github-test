@@ -1,0 +1,31 @@
+:SetMyStyle("background:inherit"):
+
+' Write JS for Interactivity
+obIconToDisplay@ := NewBuffer():
+' aodIcons@ := IconsRelatedToRisk:
+odInfo@ := New Dictionary<String, String>:
+' For(odRiskInfoPopupExtraInput#.GetImplementationCount(),
+'     odInfo@.Extend(odRiskInfoPopupExtraInput#(Inc%))
+' ):
+' WriteJS(sRiskRelativeInfosJS#(Me, odInfo@)):
+
+' Display Icons
+obIconToDisplay@ := NewBuffer():
+aodIcons@ := CS_GetRelatedIconEventTree#():
+WithOutputBuffer(obIconToDisplay@,
+    ForEach(aodIcons@,
+        sIconHTML@ := Val%.Get("IconPath"):
+        sTiltePopUp@ := Val%.Get("TitlePopUp"):
+        sHelpInfo@ := Val%.Get("HelpInfo"):
+        sIdIcon@ := Val%.Get("IdIcon"):     
+        bOpenInTab@ := If(Val%.Exists("OpenInTab"), Val%.Get("OpenInTab"), False):
+        sAnalytics@ := If(Val%.Exists("Analytics"), Val%.Get("Analytics"), Null):
+        
+        If(Def(sIdIcon@, "") = "" OR Def(sIconHTML@, "") = "" OR Def(sTiltePopUp@, "") = "" OR Def(sHelpInfo@, "") = "",
+            Error(LgT_ErrorInfoIcon#)
+        ,
+            sIconTemplate#(sIconHTML@, sTiltePopUp@, sHelpInfo@, sIdIcon@, bOpenInTab@, sAnalytics@)
+        )
+    )
+):
+"<style>span.edRMIconCxt{cursor:pointer;margin:0 5px;}</style>" & obIconToDisplay@.GetValue():
